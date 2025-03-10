@@ -18,4 +18,3 @@ git clone --depth 1 https://github.com/wbthomason/packer.nvim ~/.local/share/nvi
 # tmux
 backup ~/.tmux.conf
 ln -sf $(pwd)/.tmux.conf ~/.tmux.conf
-
