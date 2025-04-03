@@ -1,0 +1,4 @@
+#!/bin/bash
+
+# symlinks all 
+stow nvim tmux ghostty

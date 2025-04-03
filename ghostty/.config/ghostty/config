@@ -1,0 +1,4 @@
+# Hide the mouse while typing
+mouse-hide-while-typing = true
+
+font-size = 16
