@@ -38,7 +38,7 @@ local options = {
 	splitbelow = true, -- force all horizontal splits to go below current window
 	splitright = true, -- force all vertical splits to go to the right of current window
 	swapfile = false, -- creates a swapfile
-	termguicolors = true, -- set term gui colors (most terminals support this)
+	termguicolors = false, -- set term gui colors (most terminals support this)
 	timeoutlen = 300, -- time to wait for a mapped sequence to complete (in milliseconds)
 	undofile = true, -- enable persistent undo
 	updatetime = 300, -- faster completion (4000ms default)
@@ -163,14 +163,29 @@ local plugins = {
 	},
 	{
 		"mfussenegger/nvim-lint",
-		event = { "BufReadPre", "BufNewFile" },
+		event = { "BufReadPre", "BufNewFile", "BufWritePost" },
 		config = function()
-			require("lint").linters_by_ft = {
+            local lint = require("lint")
+			lint.linters_by_ft = {
 				javascript = { "eslint_d" },
 				javascriptreact = { "eslint_d" },
 				typescript = { "eslint_d" },
 				typescriptreact = { "eslint_d" },
 			}
+
+			local lint_augroup = vim.api.nvim_create_augroup("lint", { clear = true })
+
+			vim.api.nvim_create_autocmd({ "BufEnter", "BufWritePost", "InsertLeave", "TextChanged" }, {
+                pattern = { "*.ts", "*.js" },
+				group = lint_augroup,
+				callback = function()
+					lint.try_lint()
+				end,
+			})
+
+            vim.keymap.set("n", "<leader>l", function()
+                lint.try_lint()
+            end)
 		end,
 	},
 	{
@@ -524,8 +539,6 @@ vim.keymap.set("n", "<leader>gs", vim.cmd.Git)
 
 -- Color
 vim.cmd("colorscheme rose-pine")
-vim.api.nvim_set_hl(0, "Normal", { bg = "none" })
-vim.api.nvim_set_hl(0, "NormalFloat", { bg = "none" })
 
 -- Autocmds
 local reducedTabFileTypes = { "javascript", "javascriptreact", "typescript", "typescriptreact" }

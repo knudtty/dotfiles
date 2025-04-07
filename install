@@ -1,4 +1,4 @@
 #!/bin/bash
 
 # symlinks all 
-stow nvim tmux ghostty
+stow nvim tmux ghostty zsh
