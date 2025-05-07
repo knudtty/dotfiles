@@ -165,7 +165,7 @@ local plugins = {
 		"mfussenegger/nvim-lint",
 		event = { "BufReadPre", "BufNewFile", "BufWritePost" },
 		config = function()
-            local lint = require("lint")
+			local lint = require("lint")
 			lint.linters_by_ft = {
 				javascript = { "eslint_d" },
 				javascriptreact = { "eslint_d" },
@@ -175,23 +175,19 @@ local plugins = {
 
 			local lint_augroup = vim.api.nvim_create_augroup("lint", { clear = true })
 
-			vim.api.nvim_create_autocmd({ "BufEnter", "BufWritePost", "InsertLeave", "TextChanged" }, {
-                pattern = { "*.ts", "*.js" },
-				group = lint_augroup,
-				callback = function()
-					lint.try_lint()
-				end,
-			})
-
-            vim.keymap.set("n", "<leader>l", function()
-                lint.try_lint()
-            end)
+			vim.keymap.set("n", "<leader>l", function()
+				lint.try_lint()
+			end)
 		end,
 	},
 	{
 		"williamboman/mason.nvim",
+		commit = "4da89f3",
 		lazy = false,
 		opts = {},
+	},
+	{
+		"mfussenegger/nvim-dap",
 	},
 	-- Autocompletion
 	{
@@ -234,7 +230,7 @@ local plugins = {
 		dependencies = {
 			{ "hrsh7th/cmp-nvim-lsp" },
 			{ "williamboman/mason.nvim" },
-			{ "williamboman/mason-lspconfig.nvim" },
+			{ "williamboman/mason-lspconfig.nvim", commit = "1a31f82" },
 		},
 		init = function()
 			-- Reserve a space in the gutter
@@ -347,6 +343,7 @@ local plugins = {
 		dependencies = { "nvim-lua/plenary.nvim" },
 		opts = {
 			defaults = {
+				file_ignore_patterns = { ".git/" },
 				preview = {
 					mime_hook = function(filepath, bufnr, opts)
 						local is_image = function(filepath)
